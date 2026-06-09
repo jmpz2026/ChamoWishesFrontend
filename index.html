@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ChamoWishes — Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>ChamoWishes</h1>
+        <span id="status-dot" class="dot offline" title="API status"></span>
+    </header>
+
+    <main>
+        <!-- PRODUCTS -->
+        <section class="card">
+            <h2>Productos</h2>
+            <div class="row">
+                <button onclick="getAllProducts()">Ver todos</button>
+            </div>
+            <div class="row">
+                <input type="number" id="input-product-id" placeholder="ID producto" min="1">
+                <button onclick="getProductById()">Buscar por ID</button>
+            </div>
+            <pre id="output-products"></pre>
+        </section>
+
+        <!-- ADD WISH -->
+        <section class="card">
+            <h2>Agregar Wish</h2>
+            <div class="row">
+                <input type="number" id="add-user-id" placeholder="User ID" min="1">
+                <input type="number" id="add-product-id" placeholder="Product ID" min="1">
+                <button onclick="addWish()">Agregar</button>
+            </div>
+            <pre id="output-add-wish"></pre>
+        </section>
+
+        <!-- LIST WISH -->
+        <section class="card">
+            <h2>Lista de Wishes</h2>
+            <div class="row">
+                <input type="number" id="list-user-id" placeholder="User ID" min="1">
+                <button onclick="listWishes()">Ver wishes</button>
+            </div>
+            <pre id="output-list-wish"></pre>
+        </section>
+
+        <!-- DELETE WISH -->
+        <section class="card">
+            <h2>Eliminar Wish</h2>
+            <div class="row">
+                <input type="number" id="delete-wish-id" placeholder="Wish ID" min="1">
+                <button class="btn-danger" onclick="deleteWish()">Eliminar</button>
+            </div>
+            <pre id="output-delete-wish"></pre>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
