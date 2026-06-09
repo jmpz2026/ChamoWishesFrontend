@@ -1,4 +1,4 @@
-const BASE = 'https://chamowishes.onrender.com';  // mismo origen; cambia a 'http://localhost:8080' si abres el HTML suelto
+const BASE = '__API_BASE_URL__';
 
 // --- Utilidades ---
 
