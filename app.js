@@ -80,8 +80,7 @@ async function login() {
     const password = document.getElementById('login-password').value;
     if (!name || !password) return alert('Ingresa nombre y contraseña');
     try {
-        const params = new URLSearchParams({ name, password });
-        const { ok, data } = await request('GET', '/auth?' + params);
+        const { ok, data } = await request('POST', '/auth', { name, password });
         show('output-login', data, !ok);
         if (ok && data.data?.token) updateTokenBanner(data.data.name, data.data.token);
     } catch (e) {
