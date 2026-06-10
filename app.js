@@ -1,5 +1,7 @@
 const BASE = '__API_BASE_URL__';
 
+let currentToken = null;
+
 // --- Utilidades ---
 
 function show(id, data, isError) {
@@ -9,13 +11,37 @@ function show(id, data, isError) {
 }
 
 async function request(method, path, body) {
-    const opts = {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-    };
+    const headers = { 'Content-Type': 'application/json' };
+    if (currentToken) headers['Authorization'] = 'Bearer ' + currentToken;
+    const opts = { method, headers };
     if (body !== undefined) opts.body = JSON.stringify(body);
     const res = await fetch(BASE + path, opts);
     return { ok: res.ok, data: await res.json() };
+}
+
+// --- JWT Banner ---
+
+function updateTokenBanner(name, token) {
+    currentToken = token;
+    const banner = document.getElementById('jwt-banner');
+    if (token) {
+        document.getElementById('jwt-token-display').textContent = token;
+        document.getElementById('jwt-user').textContent = name;
+        banner.classList.remove('hidden');
+    } else {
+        banner.classList.add('hidden');
+        document.getElementById('jwt-token-display').textContent = '';
+        document.getElementById('jwt-user').textContent = '';
+    }
+}
+
+function copyToken() {
+    if (!currentToken) return;
+    navigator.clipboard.writeText(currentToken).then(() => alert('Token copiado al portapapeles'));
+}
+
+function logout() {
+    updateTokenBanner(null, null);
 }
 
 // --- API status ping ---
@@ -24,7 +50,7 @@ async function ping() {
     try {
         const res = await fetch(BASE + '/product/all');
         const dot = document.getElementById('status-dot');
-        if (res.ok) {
+        if (res.ok || res.status === 401 || res.status === 403) {
             dot.className = 'dot online';
             dot.title = 'API online';
         } else {
@@ -33,6 +59,34 @@ async function ping() {
         }
     } catch {
         document.getElementById('status-dot').title = 'API sin respuesta';
+    }
+}
+
+// --- Auth ---
+
+async function register() {
+    const name     = document.getElementById('reg-name').value.trim();
+    const password = document.getElementById('reg-password').value;
+    if (!name || !password) return alert('Ingresa nombre y contraseña');
+    try {
+        const { ok, data } = await request('PUT', '/auth', { name, password });
+        show('output-register', data, !ok);
+        if (ok && data.token) updateTokenBanner(data.name, data.token);
+    } catch (e) {
+        show('output-register', { error: e.message }, true);
+    }
+}
+
+async function login() {
+    const name     = document.getElementById('login-name').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!name || !password) return alert('Ingresa nombre y contraseña');
+    try {
+        const { ok, data } = await request('GET', '/auth', { name, password });
+        show('output-login', data, !ok);
+        if (ok && data.token) updateTokenBanner(data.name, data.token);
+    } catch (e) {
+        show('output-login', { error: e.message }, true);
     }
 }
 

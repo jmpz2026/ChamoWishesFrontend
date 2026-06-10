@@ -11,6 +11,41 @@
         <span id="status-dot" class="dot offline" title="API status"></span>
     </header>
 
+    <!-- JWT BANNER -->
+    <div id="jwt-banner" class="jwt-banner hidden">
+        <div class="jwt-banner-row">
+            <span class="jwt-label">Usuario:</span>
+            <span id="jwt-user" class="jwt-user"></span>
+            <span class="jwt-label">Token JWT:</span>
+            <code id="jwt-token-display" class="jwt-token"></code>
+            <button class="btn-copy" onclick="copyToken()">Copiar</button>
+            <button class="btn-logout" onclick="logout()">Salir</button>
+        </div>
+    </div>
+
+    <!-- AUTH -->
+    <section class="auth-section">
+        <div class="card">
+            <h2>Registro</h2>
+            <div class="row">
+                <input type="text" id="reg-name" placeholder="Nombre de usuario">
+                <input type="password" id="reg-password" placeholder="Contraseña">
+                <button onclick="register()">Registrar</button>
+            </div>
+            <pre id="output-register"></pre>
+        </div>
+
+        <div class="card">
+            <h2>Iniciar Sesión</h2>
+            <div class="row">
+                <input type="text" id="login-name" placeholder="Nombre de usuario">
+                <input type="password" id="login-password" placeholder="Contraseña">
+                <button onclick="login()">Entrar</button>
+            </div>
+            <pre id="output-login"></pre>
+        </div>
+    </section>
+
     <main>
         <!-- PRODUCTS -->
         <section class="card">
