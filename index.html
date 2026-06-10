@@ -12,14 +12,13 @@
     </header>
 
     <!-- JWT BANNER -->
-    <div id="jwt-banner" class="jwt-banner hidden">
+    <div id="jwt-banner" class="jwt-banner">
         <div class="jwt-banner-row">
-            <span class="jwt-label">Usuario:</span>
-            <span id="jwt-user" class="jwt-user"></span>
             <span class="jwt-label">Token JWT:</span>
-            <code id="jwt-token-display" class="jwt-token"></code>
+            <input type="text" id="jwt-token-display" class="jwt-token-input" placeholder="Pega o escribe tu token aquí…" oninput="onTokenInput(this.value)">
+            <span id="jwt-user" class="jwt-user"></span>
             <button class="btn-copy" onclick="copyToken()">Copiar</button>
-            <button class="btn-logout" onclick="logout()">Salir</button>
+            <button class="btn-logout" onclick="logout()">Limpiar</button>
         </div>
     </div>
 

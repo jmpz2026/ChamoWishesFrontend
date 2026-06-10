@@ -34,7 +34,6 @@ header h1 { font-size: 1.4rem; letter-spacing: 0.5px; }
     padding: 10px 32px;
 }
 
-.jwt-banner.hidden { display: none; }
 
 .jwt-banner-row {
     display: flex;
@@ -59,7 +58,7 @@ header h1 { font-size: 1.4rem; letter-spacing: 0.5px; }
     white-space: nowrap;
 }
 
-.jwt-token {
+.jwt-token-input {
     flex: 1;
     min-width: 0;
     font-family: monospace;
@@ -69,10 +68,11 @@ header h1 { font-size: 1.4rem; letter-spacing: 0.5px; }
     border: 1px solid #334155;
     border-radius: 4px;
     padding: 4px 8px;
-    overflow-x: auto;
     white-space: nowrap;
-    display: block;
-    max-width: 100%;
+    outline: none;
+}
+.jwt-token-input:focus {
+    border-color: #6366f1;
 }
 
 .btn-copy {

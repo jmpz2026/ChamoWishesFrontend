@@ -22,22 +22,20 @@ async function request(method, path, body) {
 // --- JWT Banner ---
 
 function updateTokenBanner(name, token) {
-    currentToken = token;
-    const banner = document.getElementById('jwt-banner');
-    if (token) {
-        document.getElementById('jwt-token-display').textContent = token;
-        document.getElementById('jwt-user').textContent = name;
-        banner.classList.remove('hidden');
-    } else {
-        banner.classList.add('hidden');
-        document.getElementById('jwt-token-display').textContent = '';
-        document.getElementById('jwt-user').textContent = '';
-    }
+    currentToken = token || null;
+    document.getElementById('jwt-token-display').value = token || '';
+    document.getElementById('jwt-user').textContent = name || '';
+}
+
+function onTokenInput(value) {
+    currentToken = value.trim() || null;
+    if (!currentToken) document.getElementById('jwt-user').textContent = '';
 }
 
 function copyToken() {
-    if (!currentToken) return;
-    navigator.clipboard.writeText(currentToken).then(() => alert('Token copiado al portapapeles'));
+    const val = document.getElementById('jwt-token-display').value;
+    if (!val) return;
+    navigator.clipboard.writeText(val).then(() => alert('Token copiado al portapapeles'));
 }
 
 function logout() {
@@ -71,7 +69,7 @@ async function register() {
     try {
         const { ok, data } = await request('PUT', '/auth', { name, password });
         show('output-register', data, !ok);
-        if (ok && data.token) updateTokenBanner(data.name, data.token);
+        if (ok && data.data?.token) updateTokenBanner(data.data.name, data.data.token);
     } catch (e) {
         show('output-register', { error: e.message }, true);
     }
@@ -82,9 +80,10 @@ async function login() {
     const password = document.getElementById('login-password').value;
     if (!name || !password) return alert('Ingresa nombre y contraseña');
     try {
-        const { ok, data } = await request('GET', '/auth', { name, password });
+        const params = new URLSearchParams({ name, password });
+        const { ok, data } = await request('GET', '/auth?' + params);
         show('output-login', data, !ok);
-        if (ok && data.token) updateTokenBanner(data.name, data.token);
+        if (ok && data.data?.token) updateTokenBanner(data.data.name, data.data.token);
     } catch (e) {
         show('output-login', { error: e.message }, true);
     }
@@ -105,7 +104,7 @@ async function getProductById() {
     const id = document.getElementById('input-product-id').value;
     if (!id) return alert('Ingresa un ID de producto');
     try {
-        const { ok, data } = await request('GET', '/product', { productId: Number(id) });
+        const { ok, data } = await request('GET', '/product?productId=' + encodeURIComponent(id));
         show('output-products', data, !ok);
     } catch (e) {
         show('output-products', { error: e.message }, true);
@@ -133,7 +132,7 @@ async function listWishes() {
     const userId = document.getElementById('list-user-id').value;
     if (!userId) return alert('Ingresa un User ID');
     try {
-        const { ok, data } = await request('GET', '/wish/all', { userId: Number(userId) });
+        const { ok, data } = await request('GET', '/wish/all?userId=' + encodeURIComponent(userId));
         show('output-list-wish', data, !ok);
     } catch (e) {
         show('output-list-wish', { error: e.message }, true);
